@@ -30,12 +30,15 @@
       color: #888;
     }
 
+    /* This is the key part for responsiveness */
     .gallery {
       display: grid;
+      /* On larger screens, minmax(300px, 1fr) ensures cards are at least 300px and take equal space */
+      /* auto-fit will create as many columns as can fit in the available space */
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
+      gap: 2rem; /* Space between cards */
       padding: 2rem;
-      justify-items: center;
+      justify-items: center; /* Center cards horizontally within their grid cell */
     }
 
     .photo-card {
@@ -44,8 +47,8 @@
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(0,0,0,0.06);
       transition: transform 0.2s ease;
-      max-width: 400px;
-      width: 100%;
+      max-width: 400px; /* Limits the card width on very large screens */
+      width: 100%; /* Ensures cards take full available width in their grid cell */
     }
 
     .photo-card:hover {
@@ -58,7 +61,7 @@
       display: block;
       object-fit: cover;
       border-bottom: 1px solid #eee;
-      max-height: 400px;
+      max-height: 400px; /* Constrain image height if needed */
     }
 
     .details {
@@ -93,6 +96,14 @@
       font-size: 0.8rem;
       color: #aaa;
     }
+
+    /* Optional: Add a media query for very small screens if you want to adjust padding or gap */
+    @media (max-width: 600px) {
+      .gallery {
+        padding: 1rem; /* Reduce padding on small screens */
+        gap: 1.5rem; /* Reduce gap on small screens */
+      }
+    }
   </style>
 </head>
 <body>
@@ -111,20 +122,17 @@
         <a class="download_btn" href="https://drive.google.com/uc?export=download&id=1-34gfOVIAo6Ip_LE29BdvlLIPsMygCvL">Download</a>
       </div>
     </div>
-  </div>
 
-<div class="photo-card">
-  <img src="https://i.ibb.co/zVy9t0V8/IMG-20240416-102802.jpg" alt="Golden Sunflower">
-  <div class="details">
-    <h3>Golden Sunflower</h3>
-    <p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
-    <p><strong>ISO:</strong> 57 <strong>Shutter:</strong> 1/1012s | <strong>f/1.8</strong></p>
-    <a class="download_btn" href="https://drive.google.com/uc?export=download&id=1-Q_A97rz625dxEeFPJYLGn0bAqLBDr-P">Download</a>
-  </div>
-</div>
-
-  
-  <footer>
+    <div class="photo-card">
+      <img src="https://i.ibb.co/zVy9t0V8/IMG-20240416-102802.jpg" alt="Golden Sunflower">
+      <div class="details">
+        <h3>Golden Sunflower</h3>
+        <p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
+        <p><strong>ISO:</strong> 57 <strong>Shutter:</strong> 1/1012s | <strong>f/1.8</strong></p>
+        <a class="download_btn" href="https://drive.google.com/uc?export=download&id=1-Q_A97rz625dxEeFPJYLGn0bAqLBDr-P">Download</a>
+      </div>
+    </div>
+    </div> <footer>
     Made with love & tea. Photos by Jelly.
   </footer>
 </body>
