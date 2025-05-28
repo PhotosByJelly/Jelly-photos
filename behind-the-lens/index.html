@@ -30,15 +30,21 @@
       color: #888;
     }
 
-    /* This is the key part for responsiveness */
     .gallery {
       display: grid;
-      /* On larger screens, minmax(300px, 1fr) ensures cards are at least 300px and take equal space */
-      /* auto-fit will create as many columns as can fit in the available space */
+      /* Default for smaller screens (mobile) or when fewer than 3 columns fit.
+         This ensures cards stack or go to 2 columns if space allows. */
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2rem; /* Space between cards */
       padding: 2rem;
       justify-items: center; /* Center cards horizontally within their grid cell */
+    }
+
+    /* Media query to enforce 3 columns on larger screens (desktop/laptop) */
+    @media (min-width: 992px) { /* Adjust 992px if you want columns to break at a different width */
+      .gallery {
+        grid-template-columns: repeat(3, 1fr); /* Exactly 3 equal columns */
+      }
     }
 
     .photo-card {
@@ -97,7 +103,7 @@
       color: #aaa;
     }
 
-    /* Optional: Add a media query for very small screens if you want to adjust padding or gap */
+    /* Optional: Fine-tune padding or gap on very small screens */
     @media (max-width: 600px) {
       .gallery {
         padding: 1rem; /* Reduce padding on small screens */
@@ -134,12 +140,22 @@
     </div>
 
     <div class="photo-card">
-      <img src="https://i.ibb.co/RpZr2mVs/IMG-20240615-105953.jpg" alt="Sulfur Cosmos">
+      <img src="https://i.ibb.co/RpZr2mVs/IMG-20240615-105953.jpg" alt="Morning Dew">
       <div class="details">
-        <h3>Sulfur Cosmos</h3>
+        <h3>Morning Dew</h3>
         <p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
-        <p><strong>ISO:</strong> 56 <strong>Shutter:</strong> 1/1029s | <strong>f/1.88</strong></p>
+        <p><strong>ISO:</strong> 100 <strong>Shutter:</strong> 1/200s | <strong>f/1.8</strong></p>
         <a class="download_btn" href="https://drive.google.com/uc?export=download&id=1-VMUoy11mRhPbPpuwbOhTMbQp2r8L3gA">Download</a>
+      </div>
+    </div>
+
+    <div class="photo-card">
+      <img src="https://i.ibb.co/9mn3FbpN/IMG-20240728-181713.jpg" alt="Greenery with Orange Flower">
+      <div class="details">
+        <h3>Greenery with Orange Flower</h3>
+        <p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
+        <p><strong>ISO:</strong> 80 <strong>Shutter:</strong> 1/150s | <strong>f/1.8</strong></p>
+        <a class="download_btn" href="https://drive.google.com/uc?export=download&id=1-Yi2vD9yDGAqlx-WuRqY9FzuygZvB-9Y">Download</a>
       </div>
     </div>
     </div> <footer>
