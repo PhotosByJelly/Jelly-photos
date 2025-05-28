@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,54 +11,71 @@
       background: #fdf6f0;
       color: #333;
     }
+
     header {
       background: #fff;
       padding: 2rem;
       text-align: center;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
+
     header h1 {
       margin: 0;
       font-size: 2.5rem;
       color: #d496a7;
     }
+
     header p {
       font-size: 1rem;
       color: #888;
     }
+
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2rem;
       padding: 2rem;
+      justify-items: center;
     }
+
     .photo-card {
       background: #fff;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(0,0,0,0.06);
       transition: transform 0.2s ease;
+      max-width: 400px;
+      width: 100%;
     }
+
     .photo-card:hover {
-      transform: scale(1.02);
+      transform: scale(1.015);
     }
+
     .photo-card img {
       width: 100%;
       height: auto;
       display: block;
+      object-fit: cover;
+      border-bottom: 1px solid #eee;
+      max-height: 400px;
     }
+
     .details {
       padding: 1rem;
     }
+
     .details h3 {
       margin: 0 0 0.5rem;
       color: #444;
     }
+
     .details p {
       margin: 0.2rem 0;
       font-size: 0.9rem;
       color: #666;
     }
+
     .download_btn {
       display: inline-block;
       margin-top: 1rem;
@@ -70,6 +86,7 @@
       text-decoration: none;
       font-size: 0.9rem;
     }
+
     footer {
       text-align: center;
       padding: 2rem;
@@ -84,17 +101,17 @@
     <p>Soft, dreamy, unedited moments – by Jelly</p>
   </header>
 
-<div class="photo-card">
-  <img src="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg" alt="Morning Rain Lily">
-  <div class="details">
-    <h3>Morning Rain Lily</h3>
-    <p><strong>Shot on:</strong> Redmi Note 12 Pro</p>
-    <p><strong>ISO:</strong> 100 <strong>Shutter:</strong> 1/1000s | <strong>f/1.9</strong></p>
-    <a class="download_btn" href="https://drive.google.com/uc?export=download&id=1-34gfOVIAo6Ip_LE29BdvlLIPsMygCvL">Download</a>
+  <div class="gallery">
+    <div class="photo-card">
+      <img src="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg" alt="Morning Rain Lily">
+      <div class="details">
+        <h3>Morning Rain Lily</h3>
+        <p><strong>Shot on:</strong> Redmi Note 12 Pro</p>
+        <p><strong>ISO:</strong> 100 <strong>Shutter:</strong> 1/1000s | <strong>f/1.9</strong></p>
+        <a class="download_btn" href="https://drive.google.com/uc?export=download&id=1-34gfOVIAo6Ip_LE29BdvlLIPsMygCvL">Download</a>
+      </div>
+    </div>
   </div>
-</div>
-
-
 
   <footer>
     Made with love & tea. Photos by Jelly.
