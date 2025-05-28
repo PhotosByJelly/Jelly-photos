@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Behind the Lens – by Jelly</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fdf6f0;
+      color: #333;
+    }
+    header {
+      background: #fff;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      color: #d496a7;
+    }
+    header p {
+      font-size: 1rem;
+      color: #888;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+    }
+    .photo-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      transition: transform 0.2s ease;
+    }
+    .photo-card:hover {
+      transform: scale(1.02);
+    }
+    .photo-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .details {
+      padding: 1rem;
+    }
+    .details h3 {
+      margin: 0 0 0.5rem;
+      color: #444;
+    }
+    .details p {
+      margin: 0.2rem 0;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .download_btn {
+      display: inline-block;
+      margin-top: 1rem;
+      background: #d496a7;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Behind the Lens</h1>
+    <p>Soft, dreamy, unedited moments – by Jelly</p>
+  </header>
+
+  <div class="gallery">
+    <div class="photo-card">
+      <img src="https://drive.google.com/file/d/1-34gfOVIAo6Ip_LE29BdvlLIPsMygCvL/view?usp=sharing" alt="Sample Photo"/>
+      <div class="details">
+        <h3>Morning Rain Lily</h3>
+        <p><strong>Shot on:</strong> Redmi Note 12 Pro</p>
+        <p><strong>ISO:</strong> 100 <strong>Shutter:</strong> 1/1000s | <strong>f/1.9</strong></p>
+        <a class="download_btn" href="https://placekitten.com/800/500" download>Download</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Made with love & tea. Photos by Jelly.
+  </footer>
+</body>
+</html>
