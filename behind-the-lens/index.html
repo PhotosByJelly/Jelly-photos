@@ -31,34 +31,32 @@
     }
 
     .gallery {
-      display: grid;
-      /* Default for smaller screens (mobile) or when fewer than 3 columns fit.
-         This ensures cards stack or go to 2 columns if space allows. */
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem; /* Space between cards */
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
       padding: 2rem;
-      justify-items: center; /* Center cards horizontally within their grid cell */
-    }
-
-    /* Media query to enforce 3 columns on larger screens (desktop/laptop) */
-    @media (min-width: 992px) { /* Adjust 992px if you want columns to break at a different width */
-      .gallery {
-        grid-template-columns: repeat(3, 1fr); /* Exactly 3 equal columns */
-      }
     }
 
     .photo-card {
       background: #fff;
       border-radius: 12px;
-      overflow: hidden;
       box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      transition: transform 0.2s ease;
-      max-width: 400px; /* Limits the card width on very large screens */
-      width: 100%; /* Ensures cards take full available width in their grid cell */
+      overflow: hidden;
+      width: 300px;
+      max-width: 100%;
+      transition: all 0.5s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      position: relative;
     }
 
-    .photo-card:hover {
-      transform: scale(1.015);
+    .photo-card.expanded {
+      flex-direction: row;
+      width: 100%;
+      max-width: none;
+      flex-wrap: nowrap;
     }
 
     .photo-card img {
@@ -67,11 +65,27 @@
       display: block;
       object-fit: cover;
       border-bottom: 1px solid #eee;
-      max-height: 400px; /* Constrain image height if needed */
+      transition: all 0.5s ease;
+      max-height: 400px;
+    }
+
+    .photo-card.expanded img {
+      width: 50%;
+      height: auto;
+      border-bottom: none;
     }
 
     .details {
       padding: 1rem;
+      display: none;
+      opacity: 0;
+      transition: all 0.5s ease;
+      width: 100%;
+    }
+
+    .photo-card.expanded .details {
+      display: block;
+      opacity: 1;
     }
 
     .details h3 {
@@ -102,14 +116,6 @@
       font-size: 0.8rem;
       color: #aaa;
     }
-
-    /* Optional: Fine-tune padding or gap on very small screens */
-    @media (max-width: 600px) {
-      .gallery {
-        padding: 1rem; /* Reduce padding on small screens */
-        gap: 1.5rem; /* Reduce gap on small screens */
-      }
-    }
   </style>
 </head>
 <body>
@@ -118,7 +124,7 @@
     <p>Soft, dreamy, unedited moments – by Jelly</p>
   </header>
 
-  <div class="gallery">
+  <div class="gallery" id="gallery">
     <div class="photo-card">
       <img src="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg" alt="Purple Water Lily">
       <div class="details">
@@ -151,7 +157,7 @@
 
     <div class="photo-card">
       <img src="https://i.ibb.co/9mn3FbpN/IMG-20240728-181713.jpg" alt="Hope Amidst the Shadows">
-      <div class="details">adow
+      <div class="details">
         <h3>Hope Amidst the Shadows</h3>
         <p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
         <p><strong>ISO:</strong> 53 <strong>Shutter:</strong> 1/125s | <strong>f/1.88</strong></p>
@@ -168,8 +174,25 @@
         <a class="download_btn" href="https://drive.google.com/uc?export=download&id=1-wAXpiKIkcG0gTBUrxzJF0IHBL-6ajF7">Download</a>
       </div>
     </div>
-    </div> <footer>
+  </div>
+
+  <footer>
     Made with love & tea. Photos by Jelly.
   </footer>
+
+  <script>
+    const cards = document.querySelectorAll('.photo-card');
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        cards.forEach(c => {
+          if (c !== card) {
+            c.classList.remove('expanded');
+          }
+        });
+        card.classList.toggle('expanded');
+      });
+    });
+  </script>
 </body>
 </html>
