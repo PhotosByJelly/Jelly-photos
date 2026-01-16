@@ -2,273 +2,321 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Behind the Lens – by Jelly</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Behind the Lens — Jelly</title>
 
 <style>
+/* ------------------ ROOT & RESET ------------------ */
 :root {
   --bg: #fdf6f0;
   --card: #ffffff;
   --accent: #d496a7;
-  --text-soft: #777;
-  --shadow-soft: 0 8px 30px rgba(0,0,0,0.08);
+  --accent-soft: rgba(212,150,167,0.25);
+  --text-main: #2e2e2e;
+  --text-muted: #888;
+  --radius: 18px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  font-family: "Segoe UI", sans-serif;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
   background: var(--bg);
-  color: #333;
+  color: var(--text-main);
   overflow-x: hidden;
 }
 
-/* ---------- Header ---------- */
+/* ------------------ HEADER ------------------ */
 header {
-  padding: 3rem 1rem 2rem;
+  padding: 4rem 1rem 3rem;
   text-align: center;
-  animation: fadeDown 1s ease forwards;
 }
 
 header h1 {
   margin: 0;
-  font-size: 2.6rem;
+  font-size: clamp(2.2rem, 5vw, 3rem);
   color: var(--accent);
+  letter-spacing: 0.5px;
 }
 
 header p {
-  color: var(--text-soft);
-  margin-top: .5rem;
+  margin-top: 0.6rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
 }
 
-/* ---------- Gallery ---------- */
+/* ------------------ GALLERY GRID ------------------ */
 .gallery {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2.2rem;
-  padding: 2rem;
-  max-width: 1400px;
-  margin: auto;
+  gap: 2rem;
+  transition: filter 0.6s var(--ease), opacity 0.6s var(--ease);
 }
 
-/* ---------- Photo Card ---------- */
+.gallery.dimmed {
+  filter: blur(3px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ------------------ PHOTO CARD ------------------ */
 .photo-card {
   background: var(--card);
-  border-radius: 16px;
-  box-shadow: var(--shadow-soft);
+  border-radius: var(--radius);
   overflow: hidden;
   cursor: pointer;
-  position: relative;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
   transform: translateY(20px);
   opacity: 0;
-  animation: floatIn 0.9s ease forwards;
+  animation: fadeUp 1s var(--ease) forwards;
 }
 
-.photo-card:nth-child(1){animation-delay:.1s}
-.photo-card:nth-child(2){animation-delay:.2s}
-.photo-card:nth-child(3){animation-delay:.3s}
+.photo-card:nth-child(1) { animation-delay: 0.1s; }
+.photo-card:nth-child(2) { animation-delay: 0.25s; }
+.photo-card:nth-child(3) { animation-delay: 0.4s; }
 
-.photo-card:hover {
-  transform: translateY(-6px);
+@keyframes fadeUp {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .photo-card img {
   width: 100%;
-  aspect-ratio: 4/3;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  transition: transform 1.2s var(--ease);
+}
+
+.photo-card:hover img {
+  transform: scale(1.05);
+}
+
+/* ------------------ OVERLAY VIEW ------------------ */
+.viewer {
+  position: fixed;
+  inset: 0;
+  background: rgba(253,246,240,0.75);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease);
+  z-index: 10;
+}
+
+.viewer.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ------------------ EXPANDED CARD ------------------ */
+.viewer-card {
+  background: var(--card);
+  width: min(1100px, 92vw);
+  border-radius: 24px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.18);
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  overflow: hidden;
+  transform: translateY(30px) scale(0.97);
+  opacity: 0;
+  transition: all 0.7s var(--ease);
+}
+
+.viewer.active .viewer-card {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.viewer-card img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
-/* ---------- Details ---------- */
+/* ------------------ DETAILS ------------------ */
 .details {
-  padding: 1.2rem;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: all .5s ease;
-}
-
-.details h3 {
-  margin-top: 0;
-}
-
-/* ---------- Expanded ---------- */
-.photo-card.expanded {
-  grid-column: 1 / -1;
+  padding: 2.5rem;
   display: flex;
-  flex-wrap: wrap;
-  z-index: 5;
-  animation: expandCard .5s ease forwards;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.photo-card.expanded img {
-  flex: 1 1 50%;
+.details h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--accent);
 }
 
-.photo-card.expanded .details {
-  flex: 1 1 50%;
-  opacity: 1;
-  max-height: 500px;
+.details .mood {
+  margin: 1rem 0;
+  font-style: italic;
+  color: #666;
 }
 
-/* ---------- Download Button ---------- */
-.download-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+.details .meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ------------------ DOWNLOAD BUTTON ------------------ */
+.download {
+  margin-top: 2rem;
+  align-self: flex-start;
+  padding: 0.8rem 1.6rem;
   background: var(--accent);
-  color: #fff;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 1.2rem;
+  color: white;
   text-decoration: none;
-  box-shadow: 0 6px 18px rgba(0,0,0,.2);
-  animation: pop .4s ease forwards;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  box-shadow: 0 10px 30px var(--accent-soft);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
-/* ---------- Backdrop ---------- */
-.backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(253,246,240,.65);
-  backdrop-filter: blur(8px);
-  z-index: 2;
-  animation: fadeIn .4s ease forwards;
+.download:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px var(--accent-soft);
 }
 
-/* ---------- Footer ---------- */
+/* ------------------ CLOSE ------------------ */
+.close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.4rem;
+  font-size: 1.6rem;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close:hover {
+  color: var(--accent);
+}
+
+/* ------------------ MOBILE ------------------ */
+@media (max-width: 900px) {
+  .viewer-card {
+    grid-template-columns: 1fr;
+  }
+  .viewer-card img {
+    max-height: 45vh;
+  }
+}
+
+/* ------------------ FOOTER ------------------ */
 footer {
   text-align: center;
-  padding: 2.5rem 1rem;
-  font-size: .8rem;
+  padding: 3rem 1rem;
+  font-size: 0.8rem;
   color: #aaa;
-}
-
-/* ---------- Animations ---------- */
-@keyframes fadeDown {
-  from { opacity:0; transform:translateY(-20px); }
-  to { opacity:1; transform:none; }
-}
-
-@keyframes floatIn {
-  to { opacity:1; transform:none; }
-}
-
-@keyframes expandCard {
-  from { transform:scale(.97); }
-  to { transform:scale(1); }
-}
-
-@keyframes pop {
-  from { transform:scale(.6); opacity:0; }
-  to { transform:scale(1); opacity:1; }
-}
-
-@keyframes fadeIn {
-  from { opacity:0; }
-  to { opacity:1; }
-}
-
-/* ---------- Mobile ---------- */
-@media(max-width:768px){
-  .photo-card.expanded { flex-direction: column; }
 }
 </style>
 </head>
 
 <body>
+
 <header>
   <h1>Behind the Lens</h1>
-  <p>Soft, dreamy, unedited moments — by Jelly</p>
+  <p>Soft, unedited moments — by Jelly</p>
 </header>
 
-<div class="gallery" id="gallery">
+<section class="gallery" id="gallery">
+  <div class="photo-card"
+    data-title="Purple Water Lily"
+    data-mood="Stillness floating above quiet water."
+    data-meta="Shot on Redmi Note 12 Pro • ISO 52 • 1/133s • f/1.88"
+    data-download="https://drive.google.com/uc?export=download&id=1-34gfOVIAo6Ip_LE29BdvlLIPsMygCvL"
+    data-img="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg">
+    <img loading="lazy" src="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg">
+  </div>
 
-<div class="photo-card" data-download="https://drive.google.com/uc?export=download&id=1-34gfOVIAo6Ip_LE29BdvlLIPsMygCvL">
-<img loading="lazy" src="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg">
-<div class="details">
-<h3>Purple Water Lily</h3>
-<p>A quiet bloom resting under evening light.</p>
-<p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
-</div>
-</div>
+  <div class="photo-card"
+    data-title="Golden Sunflower"
+    data-mood="Facing the sun without asking why."
+    data-meta="Shot on Redmi Note 12 Pro • ISO 57 • 1/1012s • f/1.8"
+    data-download="https://drive.google.com/uc?export=download&id=1-Q_A97rz625dxEeFPJYLGn0bAqLBDr-P"
+    data-img="https://i.ibb.co/zVy9t0V8/IMG-20240416-102802.jpg">
+    <img loading="lazy" src="https://i.ibb.co/zVy9t0V8/IMG-20240416-102802.jpg">
+  </div>
 
-<div class="photo-card" data-download="https://drive.google.com/uc?export=download&id=1-Q_A97rz625dxEeFPJYLGn0bAqLBDr-P">
-<img loading="lazy" src="https://i.ibb.co/zVy9t0V8/IMG-20240416-102802.jpg">
-<div class="details">
-<h3>Golden Sunflower</h3>
-<p>Facing the sun without trying too hard.</p>
-<p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
-</div>
-</div>
+  <div class="photo-card"
+    data-title="Sulphur Cosmos"
+    data-mood="Soft chaos blooming under daylight."
+    data-meta="Shot on Redmi Note 12 Pro • ISO 57 • 1/1029s • f/1.8"
+    data-download="https://drive.google.com/uc?export=download&id=1-VMUoy11mRhPbPpuwbOhTMbQp2r8L3gA"
+    data-img="https://i.ibb.co/RpZr2mVs/IMG-20240615-105953.jpg">
+    <img loading="lazy" src="https://i.ibb.co/RpZr2mVs/IMG-20240615-105953.jpg">
+  </div>
+</section>
 
-<div class="photo-card" data-download="https://drive.google.com/uc?export=download&id=1-VMUoy11mRhPbPpuwbOhTMbQp2r8L3gA">
-<img loading="lazy" src="https://i.ibb.co/RpZr2mVs/IMG-20240615-105953.jpg">
-<div class="details">
-<h3>Sulphur Cosmos</h3>
-<p>Soft chaos in warm daylight.</p>
-<p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
-</div>
-</div>
+<footer>
+  Made slowly. With love & tea.
+</footer>
 
+<!-- ------------------ VIEWER ------------------ -->
+<div class="viewer" id="viewer">
+  <div class="viewer-card">
+    <span class="close" id="close">×</span>
+    <img id="viewerImg">
+    <div class="details">
+      <h2 id="viewerTitle"></h2>
+      <p class="mood" id="viewerMood"></p>
+      <p class="meta" id="viewerMeta"></p>
+      <a id="viewerDownload" class="download" target="_blank">Download original</a>
+    </div>
+  </div>
 </div>
-
-<footer>Made with love & tea. Photos by Jelly.</footer>
 
 <script>
 const cards = document.querySelectorAll(".photo-card");
-let active = null;
-let backdrop;
+const viewer = document.getElementById("viewer");
+const gallery = document.getElementById("gallery");
 
-cards.forEach(card=>{
-  card.addEventListener("click",e=>{
-    e.stopPropagation();
+const img = document.getElementById("viewerImg");
+const title = document.getElementById("viewerTitle");
+const mood = document.getElementById("viewerMood");
+const meta = document.getElementById("viewerMeta");
+const download = document.getElementById("viewerDownload");
+const close = document.getElementById("close");
 
-    if(active && active!==card){
-      closeCard(active);
-    }
+cards.forEach(card => {
+  card.addEventListener("click", () => {
+    img.src = card.dataset.img;
+    title.textContent = card.dataset.title;
+    mood.textContent = card.dataset.mood;
+    meta.textContent = card.dataset.meta;
+    download.href = card.dataset.download;
 
-    if(card.classList.contains("expanded")){
-      closeCard(card);
-      active=null;
-    } else {
-      openCard(card);
-      active=card;
-    }
+    viewer.classList.add("active");
+    gallery.classList.add("dimmed");
   });
 });
 
-document.addEventListener("click",()=>{
-  if(active){
-    closeCard(active);
-    active=null;
-  }
+close.addEventListener("click", () => {
+  viewer.classList.remove("active");
+  gallery.classList.remove("dimmed");
 });
 
-function openCard(card){
-  card.classList.add("expanded");
-
-  backdrop=document.createElement("div");
-  backdrop.className="backdrop";
-  document.body.appendChild(backdrop);
-
-  const btn=document.createElement("a");
-  btn.href=card.dataset.download;
-  btn.className="download-btn";
-  btn.innerHTML="⬇";
-  btn.addEventListener("click",e=>e.stopPropagation());
-  card.appendChild(btn);
-}
-
-function closeCard(card){
-  card.classList.remove("expanded");
-  const btn=card.querySelector(".download-btn");
-  if(btn) btn.remove();
-  if(backdrop) backdrop.remove();
-}
+viewer.addEventListener("click", (e) => {
+  if (e.target === viewer) {
+    viewer.classList.remove("active");
+    gallery.classList.remove("dimmed");
+  }
+});
 </script>
+
 </body>
 </html>
