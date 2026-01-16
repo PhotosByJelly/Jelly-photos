@@ -6,35 +6,274 @@
 <title>Behind the Lens — Jelly</title>
 
 <style>
-/* ------------------ ROOT & RESET ------------------ */
 :root {
   --bg: #fdf6f0;
   --card: #ffffff;
-  --accent: #d496a7;
-  --accent-soft: rgba(212,150,167,0.25);
-  --text-main: #2e2e2e;
-  --text-muted: #888;
-  --radius: 18px;
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --text: #2e2e2e;
+  --muted: #888;
+  --radius: 22px;
+  --ease: cubic-bezier(.22,1,.36,1);
 }
 
-* {
-  box-sizing: border-box;
-}
+/* ---------- BASE ---------- */
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-family: "Segoe UI", system-ui, sans-serif;
   background: var(--bg);
-  color: var(--text-main);
+  color: var(--text);
   overflow-x: hidden;
 }
 
-/* ------------------ HEADER ------------------ */
+/* ---------- HEADER ---------- */
 header {
-  padding: 4rem 1rem 3rem;
   text-align: center;
+  padding: 4rem 1rem 3rem;
 }
+
+header h1 {
+  margin: 0;
+  color: #d496a7;
+  font-size: clamp(2.3rem, 5vw, 3rem);
+}
+
+header p {
+  margin-top: .6rem;
+  color: var(--muted);
+}
+
+/* ---------- GALLERY ---------- */
+.gallery {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+  gap: 2rem;
+  transition: filter .8s var(--ease);
+}
+
+.gallery.blurred {
+  filter: blur(14px) brightness(.9);
+}
+
+/* ---------- PHOTO CARD ---------- */
+.photo-card {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+
+.photo-card img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- OVERLAY ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.overlay.active {
+  pointer-events: all;
+}
+
+/* ---------- EXPANDED ---------- */
+.expanded {
+  position: absolute;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  background: transparent;
+  border-radius: 28px;
+  overflow: hidden;
+  animation: expand .9s var(--ease) forwards;
+}
+
+/* smooth image blend */
+.expanded img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.05);
+  mask-image: radial-gradient(circle at center,
+    rgba(0,0,0,1) 60%,
+    rgba(0,0,0,.85) 75%,
+    rgba(0,0,0,.6) 85%,
+    transparent 100%);
+}
+
+/* ---------- INFO PANEL ---------- */
+.info {
+  padding: 2.5rem;
+  backdrop-filter: blur(30px);
+  background: linear-gradient(135deg,
+    var(--g1),
+    var(--g2));
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.info h2 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.info .mood {
+  margin: 1rem 0;
+  font-style: italic;
+  opacity: .9;
+}
+
+.info .meta {
+  font-size: .85rem;
+  opacity: .85;
+}
+
+/* ---------- DOWNLOAD ---------- */
+.download {
+  margin-top: 2rem;
+  align-self: flex-start;
+  padding: .75rem 1.6rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.9);
+  color: #222;
+  text-decoration: none;
+  font-size: .9rem;
+  transition: transform .4s var(--ease);
+}
+
+.download:hover {
+  transform: translateY(-2px);
+}
+
+/* ---------- CLOSE ---------- */
+.close {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  font-size: 1.6rem;
+  color: white;
+  cursor: pointer;
+  z-index: 5;
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 900px) {
+  .expanded {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- ANIM ---------- */
+@keyframes expand {
+  from {
+    opacity: .8;
+    transform: scale(.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Behind the Lens</h1>
+  <p>Soft, unedited moments — by Jelly</p>
+</header>
+
+<section class="gallery" id="gallery">
+
+  <div class="photo-card"
+    data-title="Purple Water Lily"
+    data-mood="Stillness floating above quiet water."
+    data-meta="Redmi Note 12 Pro • ISO 52 • 1/133s"
+    data-download="https://drive.google.com/uc?export=download&id=1-34gfOVIAo6Ip_LE29BdvlLIPsMygCvL"
+    data-img="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg"
+    data-g1="rgba(140,90,160,.75)"
+    data-g2="rgba(212,150,167,.75)">
+    <img src="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg">
+  </div>
+
+  <div class="photo-card"
+    data-title="Golden Sunflower"
+    data-mood="Facing the sun without asking why."
+    data-meta="Redmi Note 12 Pro • ISO 57 • 1/1012s"
+    data-download="https://drive.google.com/uc?export=download&id=1-Q_A97rz625dxEeFPJYLGn0bAqLBDr-P"
+    data-img="https://i.ibb.co/zVy9t0V8/IMG-20240416-102802.jpg"
+    data-g1="rgba(245,180,70,.8)"
+    data-g2="rgba(255,220,160,.8)">
+    <img src="https://i.ibb.co/zVy9t0V8/IMG-20240416-102802.jpg">
+  </div>
+
+</section>
+
+<div class="overlay" id="overlay"></div>
+
+<script>
+const gallery = document.getElementById("gallery");
+const overlay = document.getElementById("overlay");
+
+document.querySelectorAll(".photo-card").forEach(card => {
+  card.addEventListener("click", () => {
+
+    const rect = card.getBoundingClientRect();
+    gallery.classList.add("blurred");
+
+    const clone = document.createElement("div");
+    clone.className = "expanded";
+    clone.style.left = rect.left + "px";
+    clone.style.top = rect.top + "px";
+    clone.style.width = rect.width + "px";
+    clone.style.height = rect.height + "px";
+    clone.style.setProperty("--g1", card.dataset.g1);
+    clone.style.setProperty("--g2", card.dataset.g2);
+
+    clone.innerHTML = `
+      <span class="close">×</span>
+      <img src="${card.dataset.img}">
+      <div class="info">
+        <h2>${card.dataset.title}</h2>
+        <p class="mood">${card.dataset.mood}</p>
+        <p class="meta">${card.dataset.meta}</p>
+        <a class="download" href="${card.dataset.download}" target="_blank">Download</a>
+      </div>
+    `;
+
+    overlay.appendChild(clone);
+    overlay.classList.add("active");
+
+    requestAnimationFrame(() => {
+      clone.style.left = "5vw";
+      clone.style.top = "10vh";
+      clone.style.width = "90vw";
+      clone.style.height = "80vh";
+    });
+
+    clone.querySelector(".close").onclick = () => {
+      overlay.classList.remove("active");
+      gallery.classList.remove("blurred");
+      clone.remove();
+    };
+  });
+});
+</script>
+
+</body>
+</html>}
 
 header h1 {
   margin: 0;
