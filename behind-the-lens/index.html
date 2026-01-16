@@ -1,236 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Behind the Lens – by Jelly</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #fdf6f0;
-      color: #333;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Behind the Lens – by Jelly</title>
 
-    header {
-      background: #fff;
-      padding: 2rem;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
+<style>
+:root {
+  --bg: #fdf6f0;
+  --card: #ffffff;
+  --accent: #d496a7;
+  --text-soft: #777;
+  --shadow-soft: 0 8px 30px rgba(0,0,0,0.08);
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
-      color: #d496a7;
-    }
+* { box-sizing: border-box; }
 
-    header p {
-      font-size: 1rem;
-      color: #888;
-    }
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: #333;
+  overflow-x: hidden;
+}
 
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-      padding: 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+/* ---------- Header ---------- */
+header {
+  padding: 3rem 1rem 2rem;
+  text-align: center;
+  animation: fadeDown 1s ease forwards;
+}
 
-    .photo-card {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      overflow: hidden;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      transform: translateZ(0);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+header h1 {
+  margin: 0;
+  font-size: 2.6rem;
+  color: var(--accent);
+}
 
-    .photo-card:hover {
-      transform: translateY(-5px) scale(1.02);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
+header p {
+  color: var(--text-soft);
+  margin-top: .5rem;
+}
 
-    .photo-card img {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      transition: height 0.5s ease;
-    }
+/* ---------- Gallery ---------- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2.2rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: auto;
+}
 
-    .details {
-      padding: 1rem;
-      opacity: 0;
-      height: 0;
-      overflow: hidden;
-      transition: opacity 0.4s ease, height 0.4s ease;
-    }
+/* ---------- Photo Card ---------- */
+.photo-card {
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: floatIn 0.9s ease forwards;
+}
 
-    .expanded {
-      grid-column: 1 / -1;
-      display: flex;
-      flex-wrap: wrap;
-      position: relative;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 8px 28px rgba(0,0,0,0.1);
-      padding: 1rem;
-      animation: popIn 0.4s ease forwards;
-    }
+.photo-card:nth-child(1){animation-delay:.1s}
+.photo-card:nth-child(2){animation-delay:.2s}
+.photo-card:nth-child(3){animation-delay:.3s}
 
-    @keyframes popIn {
-      0% { transform: scale(0.98); opacity: 0.8; }
-      100% { transform: scale(1); opacity: 1; }
-    }
+.photo-card:hover {
+  transform: translateY(-6px);
+}
 
-    .expanded img {
-      flex: 1 1 50%;
-      max-height: 500px;
-      border-radius: 12px;
-      transition: transform 0.4s ease;
-    }
+.photo-card img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
 
-    .expanded .details {
-      flex: 1 1 50%;
-      opacity: 1;
-      height: auto;
-      padding: 1.5rem;
-    }
+/* ---------- Details ---------- */
+.details {
+  padding: 1.2rem;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all .5s ease;
+}
 
-    .download-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: #d496a7;
-      color: white;
-      padding: 0.6rem;
-      border-radius: 50%;
-      text-decoration: none;
-      font-size: 1.2rem;
-      display: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
+.details h3 {
+  margin-top: 0;
+}
 
-    .download-btn:hover {
-      background: #c38495;
-      transform: scale(1.1);
-    }
+/* ---------- Expanded ---------- */
+.photo-card.expanded {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  z-index: 5;
+  animation: expandCard .5s ease forwards;
+}
 
-    .expanded .download-btn {
-      display: inline-block;
-      animation: fadeIn 0.4s ease forwards;
-    }
+.photo-card.expanded img {
+  flex: 1 1 50%;
+}
 
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: scale(0.8); }
-      100% { opacity: 1; transform: scale(1); }
-    }
+.photo-card.expanded .details {
+  flex: 1 1 50%;
+  opacity: 1;
+  max-height: 500px;
+}
 
-    footer {
-      text-align: center;
-      padding: 2rem;
-      font-size: 0.8rem;
-      color: #aaa;
-    }
+/* ---------- Download Button ---------- */
+.download-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--accent);
+  color: #fff;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(0,0,0,.2);
+  animation: pop .4s ease forwards;
+}
 
-    @media (max-width: 768px) {
-      .expanded {
-        flex-direction: column;
-      }
-      .expanded img, .expanded .details {
-        flex: 1 1 100%;
-        max-width: 100%;
-      }
-    }
-  </style>
+/* ---------- Backdrop ---------- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(253,246,240,.65);
+  backdrop-filter: blur(8px);
+  z-index: 2;
+  animation: fadeIn .4s ease forwards;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  font-size: .8rem;
+  color: #aaa;
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeDown {
+  from { opacity:0; transform:translateY(-20px); }
+  to { opacity:1; transform:none; }
+}
+
+@keyframes floatIn {
+  to { opacity:1; transform:none; }
+}
+
+@keyframes expandCard {
+  from { transform:scale(.97); }
+  to { transform:scale(1); }
+}
+
+@keyframes pop {
+  from { transform:scale(.6); opacity:0; }
+  to { transform:scale(1); opacity:1; }
+}
+
+@keyframes fadeIn {
+  from { opacity:0; }
+  to { opacity:1; }
+}
+
+/* ---------- Mobile ---------- */
+@media(max-width:768px){
+  .photo-card.expanded { flex-direction: column; }
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <h1>Behind the Lens</h1>
-    <p>Soft, dreamy, unedited moments – by Jelly</p>
-  </header>
+<header>
+  <h1>Behind the Lens</h1>
+  <p>Soft, dreamy, unedited moments — by Jelly</p>
+</header>
 
-  <div class="gallery" id="gallery">
-    <div class="photo-card" data-download="https://drive.google.com/uc?export=download&id=1-34gfOVIAo6Ip_LE29BdvlLIPsMygCvL">
-      <img src="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg" alt="Purple Water Lily">
-      <div class="details">
-        <h3>Purple Water Lily</h3>
-        <p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
-        <p><strong>ISO:</strong> 52 <strong>Shutter:</strong> 1/133s | <strong>f/1.88</strong></p>
-      </div>
-    </div>
+<div class="gallery" id="gallery">
 
-    <div class="photo-card" data-download="https://drive.google.com/uc?export=download&id=1-Q_A97rz625dxEeFPJYLGn0bAqLBDr-P">
-      <img src="https://i.ibb.co/zVy9t0V8/IMG-20240416-102802.jpg" alt="Golden Sunflower">
-      <div class="details">
-        <h3>Golden Sunflower</h3>
-        <p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
-        <p><strong>ISO:</strong> 57 <strong>Shutter:</strong> 1/1012s | <strong>f/1.8</strong></p>
-      </div>
-    </div>
+<div class="photo-card" data-download="https://drive.google.com/uc?export=download&id=1-34gfOVIAo6Ip_LE29BdvlLIPsMygCvL">
+<img loading="lazy" src="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg">
+<div class="details">
+<h3>Purple Water Lily</h3>
+<p>A quiet bloom resting under evening light.</p>
+<p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
+</div>
+</div>
 
-    <div class="photo-card" data-download="https://drive.google.com/uc?export=download&id=1-VMUoy11mRhPbPpuwbOhTMbQp2r8L3gA">
-      <img src="https://i.ibb.co/RpZr2mVs/IMG-20240615-105953.jpg" alt="Sulphur Cosmos">
-      <div class="details">
-        <h3>Sulphur Cosmos</h3>
-        <p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
-        <p><strong>ISO:</strong> 57 <strong>Shutter:</strong> 1/1029s | <strong>f/1.8</strong></p>
-      </div>
-    </div>
-  </div>
+<div class="photo-card" data-download="https://drive.google.com/uc?export=download&id=1-Q_A97rz625dxEeFPJYLGn0bAqLBDr-P">
+<img loading="lazy" src="https://i.ibb.co/zVy9t0V8/IMG-20240416-102802.jpg">
+<div class="details">
+<h3>Golden Sunflower</h3>
+<p>Facing the sun without trying too hard.</p>
+<p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
+</div>
+</div>
 
-  <footer>
-    Made with love & tea. Photos by Jelly.
-  </footer>
+<div class="photo-card" data-download="https://drive.google.com/uc?export=download&id=1-VMUoy11mRhPbPpuwbOhTMbQp2r8L3gA">
+<img loading="lazy" src="https://i.ibb.co/RpZr2mVs/IMG-20240615-105953.jpg">
+<div class="details">
+<h3>Sulphur Cosmos</h3>
+<p>Soft chaos in warm daylight.</p>
+<p><strong>Shot on:</strong> Redmi Note 12 Pro 5G</p>
+</div>
+</div>
 
-  <script>
-    const cards = document.querySelectorAll('.photo-card');
-    let expandedCard = null;
+</div>
 
-    cards.forEach(card => {
-      card.addEventListener('click', () => {
-        if (expandedCard && expandedCard !== card) {
-          expandedCard.classList.remove('expanded');
-          const oldBtn = expandedCard.querySelector('.download-btn');
-          if (oldBtn) oldBtn.remove();
-        }
+<footer>Made with love & tea. Photos by Jelly.</footer>
 
-        if (card.classList.contains('expanded')) {
-          card.classList.remove('expanded');
-          const btn = card.querySelector('.download-btn');
-          if (btn) btn.remove();
-          expandedCard = null;
-        } else {
-          card.classList.add('expanded');
-          expandedCard = card;
+<script>
+const cards = document.querySelectorAll(".photo-card");
+let active = null;
+let backdrop;
 
-          const downloadLink = card.dataset.download;
-          if (downloadLink) {
-            const btn = document.createElement('a');
-            btn.href = downloadLink;
-            btn.className = 'download-btn';
-            btn.innerHTML = '⬇';
-            card.appendChild(btn);
-          }
-        }
-      });
-    });
+cards.forEach(card=>{
+  card.addEventListener("click",e=>{
+    e.stopPropagation();
 
-    document.addEventListener('click', (e) => {
-      if (expandedCard && !expandedCard.contains(e.target)) {
-        expandedCard.classList.remove('expanded');
-        const btn = expandedCard.querySelector('.download-btn');
-        if (btn) btn.remove();
-        expandedCard = null;
-      }
-    });
-  </script>
+    if(active && active!==card){
+      closeCard(active);
+    }
+
+    if(card.classList.contains("expanded")){
+      closeCard(card);
+      active=null;
+    } else {
+      openCard(card);
+      active=card;
+    }
+  });
+});
+
+document.addEventListener("click",()=>{
+  if(active){
+    closeCard(active);
+    active=null;
+  }
+});
+
+function openCard(card){
+  card.classList.add("expanded");
+
+  backdrop=document.createElement("div");
+  backdrop.className="backdrop";
+  document.body.appendChild(backdrop);
+
+  const btn=document.createElement("a");
+  btn.href=card.dataset.download;
+  btn.className="download-btn";
+  btn.innerHTML="⬇";
+  btn.addEventListener("click",e=>e.stopPropagation());
+  card.appendChild(btn);
+}
+
+function closeCard(card){
+  card.classList.remove("expanded");
+  const btn=card.querySelector(".download-btn");
+  if(btn) btn.remove();
+  if(backdrop) backdrop.remove();
+}
+</script>
 </body>
 </html>
