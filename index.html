@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,6 +47,10 @@ header p{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
   gap:2rem;
+  transition:filter .8s var(--ease);
+}
+.gallery.blurred{
+  filter:blur(18px) brightness(.9);
 }
 
 /* ---------- PHOTO CARD ---------- */
@@ -222,6 +225,30 @@ header p{
     <img src="https://i.ibb.co/RpZr2mVs/IMG-20240615-105953.jpg">
   </div>
 
+  <!-- 4 -->
+  <div class="photo-card"
+    data-title="Sida Acuta"
+    data-mood="Tiny yellow petals dancing in morning light — a wild healer growing freely."
+    data-meta="Redmi Note 12 Pro 5G • ISO 53 • 1/1290s"
+    data-download="https://drive.google.com/uc?export=download&id=1-wAXpiKIkcG0gTBUrxzJF0IHBL-6ajF7"
+    data-img="https://i.ibb.co/S4w00KLy/IMG-20241003-091723.jpg"
+    data-g1="rgba(250,200,60,.85)"
+    data-g2="rgba(160,190,80,.85)">
+    <img src="https://i.ibb.co/S4w00KLy/IMG-20241003-091723.jpg">
+  </div>
+
+  <!-- 5 -->
+  <div class="photo-card"
+    data-title="Hope Amidst The Shadows"
+    data-mood="When day surrenders to dusk, the sky paints poetry between the clouds."
+    data-meta="Redmi Note 12 Pro 5G • ISO 53 • 1/125s"
+    data-download="https://drive.google.com/uc?export=download&id=1-Yi2vD9yDGAqlx-WuRqY9FzuygZvB-9Y"
+    data-img="https://i.ibb.co/9mn3FbpN/IMG-20240728-181713.jpg"
+    data-g1="rgba(100,120,180,.8)"
+    data-g2="rgba(220,140,100,.8)">
+    <img src="https://i.ibb.co/9mn3FbpN/IMG-20240728-181713.jpg">
+  </div>
+
 </section>
 
 <div class="overlay" id="overlay"></div>
@@ -234,6 +261,8 @@ document.querySelectorAll(".photo-card").forEach(card=>{
   card.addEventListener("click",()=>{
     const img = card.querySelector("img");
     const r = img.getBoundingClientRect();
+
+    gallery.classList.add("blurred");
 
     const morph = document.createElement("div");
     morph.className="morph";
@@ -268,6 +297,7 @@ document.querySelectorAll(".photo-card").forEach(card=>{
     morph.querySelector(".close").onclick=()=>{
       morph.remove();
       overlay.classList.remove("active");
+      gallery.classList.remove("blurred");
     };
   });
 });
