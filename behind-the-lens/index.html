@@ -5,69 +5,41 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Behind the Lens — Jelly</title>
 
-<!-- =========================
-     ROOT VARIABLES
-========================= -->
 <style>
 :root{
   --bg:#fdf6f0;
-  --card:#ffffff;
   --text:#2e2e2e;
-  --muted:#8a8a8a;
-
-  --radius-lg:28px;
-  --radius-md:18px;
-  --radius-sm:12px;
-
+  --muted:#888;
+  --radius:22px;
   --ease:cubic-bezier(.22,1,.36,1);
-  --fast:.35s;
-  --slow:.8s;
 }
 
-/* =========================
-   RESET + BASE
-========================= */
-*,
-*::before,
-*::after{
-  box-sizing:border-box;
-}
-
-html,body{
-  margin:0;
-  padding:0;
-}
+*{box-sizing:border-box}
 
 body{
-  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  margin:0;
+  font-family:"Segoe UI",system-ui,sans-serif;
   background:var(--bg);
   color:var(--text);
   overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
 }
 
-/* =========================
-   HEADER
-========================= */
+/* ---------- HEADER ---------- */
 header{
   text-align:center;
   padding:4rem 1rem 3rem;
 }
-
 header h1{
   margin:0;
   font-size:clamp(2.3rem,5vw,3rem);
   color:#d496a7;
 }
-
 header p{
   margin-top:.6rem;
   color:var(--muted);
 }
 
-/* =========================
-   GALLERY GRID
-========================= */
+/* ---------- GALLERY ---------- */
 .gallery{
   max-width:1400px;
   margin:0 auto;
@@ -75,31 +47,21 @@ header p{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
   gap:2rem;
-  transition:opacity .4s ease;
+  transition:opacity .4s ease, transform .4s ease;
+}
+.gallery.blurred{
+  opacity:.25;
+  transform:scale(.98);
 }
 
-.gallery.dimmed{
-  opacity:.35;
-  pointer-events:none;
-}
-
-/* =========================
-   PHOTO CARD
-========================= */
+/* ---------- PHOTO CARD ---------- */
 .photo-card{
-  background:var(--card);
-  border-radius:var(--radius-lg);
+  background:white;
+  border-radius:var(--radius);
   overflow:hidden;
   cursor:pointer;
   box-shadow:0 12px 30px rgba(0,0,0,.08);
-  transition:transform .35s ease, box-shadow .35s ease;
 }
-
-.photo-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 20px 40px rgba(0,0,0,.12);
-}
-
 .photo-card img{
   width:100%;
   aspect-ratio:4/3;
@@ -107,56 +69,35 @@ header p{
   display:block;
 }
 
-/* =========================
-   OVERLAY ROOT
-========================= */
+/* ---------- OVERLAY ---------- */
 .overlay{
   position:fixed;
   inset:0;
-  z-index:50;
   pointer-events:none;
+  z-index:10;
 }
-
 .overlay.active{
   pointer-events:auto;
 }
 
-/* =========================
-   MORPH CONTAINER
-========================= */
+/* ---------- MORPH ---------- */
 .morph{
   position:absolute;
-  top:0;
-  left:0;
-  width:0;
-  height:0;
-  border-radius:var(--radius-lg);
+  border-radius:28px;
   overflow:hidden;
-
   background:black;
-  box-shadow:
-    0 40px 120px rgba(0,0,0,.25),
-    0 0 60px rgba(0,0,0,.15);
-
+  box-shadow:0 40px 120px rgba(0,0,0,.25);
   will-change:transform;
-  transition:transform var(--slow) var(--ease),
-             border-radius var(--fast) ease;
+  transition:transform .8s var(--ease), border-radius .8s var(--ease);
 }
 
-/* =========================
-   MORPH IMAGE
-========================= */
 .morph img{
   width:100%;
   height:100%;
-  object-fit:contain;
-  background:black;
-  display:block;
+  object-fit:cover;
 }
 
-/* =========================
-   INFO PANEL
-========================= */
+/* ---------- INFO PANEL ---------- */
 .info{
   position:absolute;
   top:0;
@@ -164,13 +105,10 @@ header p{
   width:38%;
   height:100%;
   padding:2.6rem;
-
   display:flex;
   flex-direction:column;
   justify-content:center;
-
   color:white;
-  backdrop-filter:blur(18px);
   background:linear-gradient(135deg,var(--g1),var(--g2));
 }
 
@@ -178,21 +116,17 @@ header p{
   margin:0;
   font-size:1.8rem;
 }
-
 .info .mood{
   margin:1rem 0;
   font-style:italic;
   opacity:.9;
 }
-
 .info .meta{
   font-size:.85rem;
   opacity:.85;
 }
 
-/* =========================
-   DOWNLOAD BUTTON
-========================= */
+/* ---------- DOWNLOAD ---------- */
 .download{
   margin-top:2rem;
   align-self:flex-start;
@@ -204,27 +138,22 @@ header p{
   font-size:.9rem;
   transition:transform .3s ease;
 }
-
 .download:hover{
   transform:translateY(-2px);
 }
 
-/* =========================
-   CLOSE BUTTON
-========================= */
+/* ---------- CLOSE ---------- */
 .close{
   position:absolute;
   top:1rem;
   right:1.2rem;
-  font-size:1.8rem;
+  font-size:1.6rem;
   color:white;
   cursor:pointer;
   z-index:5;
 }
 
-/* =========================
-   MOBILE
-========================= */
+/* ---------- MOBILE ---------- */
 @media(max-width:900px){
   .info{
     position:relative;
@@ -244,12 +173,12 @@ header p{
 
 <section class="gallery" id="gallery">
 
-  <!-- CARD -->
   <div class="photo-card"
     data-title="Purple Water Lily"
     data-mood="Stillness floating above quiet water."
     data-meta="Redmi Note 12 Pro • ISO 52 • 1/133s"
     data-download="https://drive.google.com/uc?export=download&id=1-34gfOVIAo6Ip_LE29BdvlLIPsMygCvL"
+    data-img="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg"
     data-g1="rgba(140,90,160,.85)"
     data-g2="rgba(212,150,167,.85)">
     <img src="https://i.ibb.co/TM5G95rk/IMG-20230322-193250-4x3.jpg">
@@ -260,9 +189,21 @@ header p{
     data-mood="Facing the sun without asking why."
     data-meta="Redmi Note 12 Pro • ISO 57 • 1/1012s"
     data-download="https://drive.google.com/uc?export=download&id=1-Q_A97rz625dxEeFPJYLGn0bAqLBDr-P"
+    data-img="https://i.ibb.co/zVy9t0V8/IMG-20240416-102802.jpg"
     data-g1="rgba(245,180,70,.85)"
     data-g2="rgba(255,220,160,.85)">
     <img src="https://i.ibb.co/zVy9t0V8/IMG-20240416-102802.jpg">
+  </div>
+
+  <div class="photo-card"
+    data-title="Sulphur Cosmos"
+    data-mood="Soft chaos blooming under daylight."
+    data-meta="Redmi Note 12 Pro • ISO 57 • 1/1029s"
+    data-download="https://drive.google.com/uc?export=download&id=1-VMUoy11mRhPbPpuwbOhTMbQp2r8L3gA"
+    data-img="https://i.ibb.co/RpZr2mVs/IMG-20240615-105953.jpg"
+    data-g1="rgba(240,170,80,.85)"
+    data-g2="rgba(180,210,120,.85)">
+    <img src="https://i.ibb.co/RpZr2mVs/IMG-20240615-105953.jpg">
   </div>
 
 </section>
@@ -273,68 +214,58 @@ header p{
 const gallery = document.getElementById("gallery");
 const overlay = document.getElementById("overlay");
 
-let activeMorph = null;
-
-function openImage(card){
-  const img = card.querySelector("img");
-  const rect = img.getBoundingClientRect();
-
-  gallery.classList.add("dimmed");
-
-  const morph = document.createElement("div");
-  morph.className = "morph";
-  morph.style.width = rect.width + "px";
-  morph.style.height = rect.height + "px";
-  morph.style.transform =
-    `translate(${rect.left}px, ${rect.top}px) scale(1)`;
-
-  morph.style.setProperty("--g1",card.dataset.g1);
-  morph.style.setProperty("--g2",card.dataset.g2);
-
-  morph.innerHTML = `
-    <span class="close">×</span>
-    <img src="${img.src}">
-    <div class="info">
-      <h2>${card.dataset.title}</h2>
-      <p class="mood">${card.dataset.mood}</p>
-      <p class="meta">${card.dataset.meta}</p>
-      <a class="download" href="${card.dataset.download}" target="_blank">
-        Download
-      </a>
-    </div>
-  `;
-
-  overlay.appendChild(morph);
-  overlay.classList.add("active");
-  activeMorph = morph;
-
-  requestAnimationFrame(()=>{
-    const scaleX = window.innerWidth * .88 / rect.width;
-    const scaleY = window.innerHeight * .8 / rect.height;
-
-    morph.style.transform =
-      `translate(6vw, 10vh) scale(${scaleX}, ${scaleY})`;
-  });
-
-  morph.querySelector(".close").onclick = closeImage;
-}
-
-function closeImage(){
-  if(!activeMorph) return;
-
-  const morph = activeMorph;
-  morph.style.transform = morph.style.transform.replace(/scale.*$/, "scale(1)");
-
-  setTimeout(()=>{
-    morph.remove();
-    overlay.classList.remove("active");
-    gallery.classList.remove("dimmed");
-    activeMorph = null;
-  }, 500);
-}
-
 document.querySelectorAll(".photo-card").forEach(card=>{
-  card.addEventListener("click",()=>openImage(card));
+  card.onclick = ()=>{
+    const img = card.querySelector("img");
+    const r = img.getBoundingClientRect();
+
+    gallery.classList.add("blurred");
+
+    const morph = document.createElement("div");
+    morph.className = "morph";
+    morph.style.left = r.left + "px";
+    morph.style.top = r.top + "px";
+    morph.style.width = r.width + "px";
+    morph.style.height = r.height + "px";
+    morph.style.setProperty("--g1", card.dataset.g1);
+    morph.style.setProperty("--g2", card.dataset.g2);
+
+    morph.innerHTML = `
+      <span class="close">×</span>
+      <img src="${card.dataset.img}">
+      <div class="info">
+        <h2>${card.dataset.title}</h2>
+        <p class="mood">${card.dataset.mood}</p>
+        <p class="meta">${card.dataset.meta}</p>
+        <a class="download" href="${card.dataset.download}" target="_blank">Download</a>
+      </div>
+    `;
+
+    overlay.appendChild(morph);
+    overlay.classList.add("active");
+
+    const endX = window.innerWidth * 0.06;
+    const endY = window.innerHeight * 0.1;
+    const endW = window.innerWidth * 0.88;
+    const endH = window.innerHeight * 0.8;
+
+    const scaleX = endW / r.width;
+    const scaleY = endH / r.height;
+
+    morph.style.transformOrigin = "top left";
+
+    requestAnimationFrame(()=>{
+      morph.style.transform =
+        `translate(${endX - r.left}px, ${endY - r.top}px)
+         scale(${scaleX}, ${scaleY})`;
+    });
+
+    morph.querySelector(".close").onclick = ()=>{
+      morph.remove();
+      overlay.classList.remove("active");
+      gallery.classList.remove("blurred");
+    };
+  };
 });
 </script>
 
